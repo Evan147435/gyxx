@@ -1,232 +1,412 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智慧校园统一门户</title>
+    <title>SCMP@智慧校园统一信息门户 - 株洲市工业中等专业学校</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Segoe UI", "Microsoft Yahei", sans-serif;
+            font-family: "Microsoft Yahei", "Segoe UI", sans-serif;
         }
 
-        /* 天蓝色科技渐变背景 */
+        /* 校园专属天蓝色渐变背景 + 层次感 */
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #1a73e8 0%, #4285f4 35%, #5bacff 70%, #84b6ff 100%);
+            background: linear-gradient(135deg, #1967D2 0%, #4285F4 50%, #8AB4F8 100%);
             background-attachment: fixed;
             color: #fff;
-            line-height: 1.6;
             position: relative;
             overflow-x: hidden;
+            padding-bottom: 50px;
         }
 
-        /* 科技网格底纹 */
+        /* 科技网格底纹（增强层次感） */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0;left: 0;width: 100%;height: 100%;
             background-image:
-                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-            background-size: 40px 40px;
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* 顶部导航 */
-        .navbar {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            height: 65px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
+        /* 顶部遮罩（突出内容） */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;left: 0;width: 100%;height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(15,70,156,0.2) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 顶部导航栏（学校官方风格） */
+        .header {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 3px solid #1967D2;
+            padding: 15px 30px;
             display: flex;
             align-items: center;
-            padding: 0 30px;
-            position: sticky;
-            top: 0;
-            z-index: 999;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .logo {
-            height: 38px;
-            margin-right: 14px;
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .navbar-title {
-            font-size: 21px;
+        .school-logo {
+            height: 50px;
+            /* 可替换为学校真实LOGO */
+            background: #1967D2;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .school-title {
+            font-size: 20px;
             font-weight: 600;
-            color: #ffffff;
+            color: #1967D2;
         }
 
-        /* 头部 */
-        .hero {
+        .portal-subtitle {
+            font-size: 14px;
+            color: #5f6368;
+            margin-top: 2px;
+        }
+
+        /* 门户标题区域 */
+        .portal-header {
             text-align: center;
-            padding: 45px 20px 30px;
+            padding: 30px 20px 20px;
             position: relative;
             z-index: 1;
         }
 
-        .hero h1 {
-            font-size: 32px;
+        .portal-title {
+            font-size: 28px;
             font-weight: 600;
             margin-bottom: 8px;
-            text-shadow: 0 1px 6px rgba(0,0,0,0.15);
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.15);
         }
 
-        .hero p {
+        .portal-desc {
             font-size: 15px;
             color: rgba(255,255,255,0.9);
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
-        /* 布局 */
+        /* 主容器 */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px 30px;
             position: relative;
             z-index: 1;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 18px;
+        /* 分类标题（子菜单分组） */
+        .category-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin: 25px 0 15px;
+            padding-left: 10px;
+            border-left: 4px solid #1967D2;
+            display: inline-block;
         }
 
-        /* 卡片：图标左 + 文字右 + 扁平等 */
+        /* 卡片网格布局 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        /* 扁平化卡片样式（核心） */
         .card {
-            background: rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
-            height: 80px; /* 卡片变矮 */
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 8px;
+            height: 75px;
             display: flex;
             align-items: center;
-            padding: 0 22px;
+            padding: 0 20px;
             gap: 18px;
             text-decoration: none;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            transition: all 0.28s ease;
+            color: #202124;
+            border: 1px solid rgba(25, 103, 210, 0.2);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.28);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 20px rgba(66, 133, 244, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(25, 103, 210, 0.2);
+            border-color: #1967D2;
+            background: #fff;
         }
 
-        /* 左侧图标 */
+        /* 左侧图标（扁平化校园风格） */
         .card-icon {
-            width: 46px;
-            height: 46px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            background: #E8F0FE;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
+            color: #1967D2;
             flex-shrink: 0;
         }
 
         /* 右侧文字 */
-        .card-title {
-            font-size: 15px;
-            font-weight: 500;
-            text-align: left;
+        .card-text {
             flex: 1;
         }
 
-        /* 移动端 */
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 2px;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        /* 外链标识 */
+        .external-link {
+            color: #1967D2;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        /* 响应式适配 */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 24px;
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px 10px;
             }
+
+            .school-title {
+                font-size: 16px;
+            }
+
+            .portal-title {
+                font-size: 22px;
+            }
+
             .grid {
                 grid-template-columns: 1fr;
-                gap: 14px;
+                gap: 12px;
             }
+
             .card {
-                height: 72px;
+                height: 70px;
+                padding: 0 15px;
             }
         }
+
+        /* 页脚（学校官方风格） */
+        .footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid #ddd;
+            color: #5f6368;
+            font-size: 13px;
+        }
+
+        .school-name {
+            color: #1967D2;
+            font-weight: 600;
+        }
     </style>
+    <!-- 引入图标库（扁平化校园图标） -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-    <!-- 导航 -->
-    <div class="navbar">
-        <img src="https://via.placeholder.com/40" alt="LOGO" class="logo">
-        <div class="navbar-title">智慧校园统一门户</div>
+    <!-- 顶部导航（学校LOGO+名称） -->
+    <div class="header">
+        <div class="logo-box">
+            <img src="https://img2.baidu.com/it/u=3098401122,613490405&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500" alt="株洲工业中专LOGO" class="school-logo">
+            <div>
+                <div class="school-title">株洲市工业中等专业学校</div>
+                <div class="portal-subtitle">SCMP@智慧校园统一信息门户</div>
+            </div>
+        </div>
+        <div style="font-size:14px;color:#1967D2;font-weight:500;">一网通办 · 智慧校园综合服务平台</div>
     </div>
 
-    <!-- 标题 -->
-    <div class="hero">
-        <h1>SCMP@智慧校园统一信息门户</h1>
-        <p>智慧校园综合服务平台</p>
+    <!-- 门户主标题 -->
+    <div class="portal-header">
+        <h1 class="portal-title">智慧校园统一信息门户</h1>
+        <p class="portal-desc">校园综合服务管理平台</p>
     </div>
 
-    <!-- 功能卡片 -->
+    <!-- 核心内容：卡片菜单（支持子菜单+外链） -->
     <div class="container">
+        <!-- 第一类：教学管理系统 -->
+        <h2 class="category-title">教学管理系统</h2>
         <div class="grid">
-            <a href="media.html" class="card">
-                <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
-                <div class="card-title">媒体宣传系统</div>
-            </a>
-            <a href="dispatch.html" class="card">
-                <div class="card-icon"><i class="fas fa-city"></i></div>
-                <div class="card-title">调度中心系统</div>
-            </a>
-            <a href="service.html" class="card">
-                <div class="card-icon"><i class="fas fa-handshake"></i></div>
-                <div class="card-title">群众服务系统</div>
-            </a>
-            <a href="grid.html" class="card">
-                <div class="card-icon"><i class="fas fa-layer-group"></i></div>
-                <div class="card-title">网格治理系统</div>
-            </a>
-            <a href="data.html" class="card">
-                <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
-                <div class="card-title">数据管理系统</div>
-            </a>
-            <a href="screen.html" class="card">
-                <div class="card-icon"><i class="fas fa-desktop"></i></div>
-                <div class="card-title">数据展示大屏</div>
-            </a>
-            <a href="monitor.html" class="card">
-                <div class="card-icon"><i class="fas fa-video"></i></div>
-                <div class="card-title">天翼监控系统</div>
-            </a>
-            <a href="broadcast.html" class="card">
-                <div class="card-icon"><i class="fas fa-volume-high"></i></div>
-                <div class="card-title">天翼大喇叭</div>
-            </a>
-            <a href="kqkh.html" class="card">
-                <div class="card-icon"><i class="fas fa-fire-flame-curved"></i></div>
-                <div class="card-title">考勤考核系统</div>
-            </a>
-            <a href="https://vfqzxfqmsh.coze.site/" class="card">
-                <div class="card-icon"><i class="fas fa-door-closed"></i></div>
-                <div class="card-title">周报统计系统</div>
-            </a>
-            <a href="jiaowu.html" class="card">
+            <a href="https://jwgl.xxxschool.edu.cn" target="_blank" class="card">
                 <div class="card-icon"><i class="fas fa-book"></i></div>
-                <div class="card-title">教务管理系统</div>
+                <div class="card-text">
+                    <div class="card-title">教务管理系统 <i class="fas fa-external-link-alt external-link"></i></div>
+                    <div class="card-desc">课表查询/成绩分析/选课管理</div>
+                </div>
             </a>
-            <a href="config.html" class="card">
-                <div class="card-icon"><i class="fas fa-sliders"></i></div>
-                <div class="card-title">平台配置中心</div>
+            <a href="https://lib.xxxschool.edu.cn" target="_blank" class="card">
+                <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                <div class="card-text">
+                    <div class="card-title">图书馆资源 <i class="fas fa-external-link-alt external-link"></i></div>
+                    <div class="card-desc">馆藏查询/数字资源/空间预约</div>
+                </div>
+            </a>
+            <a href="kqks.html" class="card">
+                <div class="card-icon"><i class="fas fa-user-check"></i></div>
+                <div class="card-text">
+                    <div class="card-title">考勤考核系统</div>
+                    <div class="card-desc">智能考勤/考勤统计/考核系统</div>
+                </div>
             </a>
         </div>
+
+        <!-- 第二类：学生综合服务 -->
+        <h2 class="category-title">学生综合服务</h2>
+        <div class="grid">
+            <a href="xuesheng.html" class="card">
+                <div class="card-icon"><i class="fas fa-users"></i></div>
+                <div class="card-text">
+                    <div class="card-title">学生综合服务</div>
+                    <div class="card-desc">学工管理/奖助贷/第二课堂</div>
+                </div>
+            </a>
+            <a href="yikatong.html" class="card">
+                <div class="card-icon"><i class="fas fa-id-card"></i></div>
+                <div class="card-text">
+                    <div class="card-title">一卡通门禁</div>
+                    <div class="card-desc">校园卡消费/门禁权限/水控</div>
+                </div>
+            </a>
+            <a href="http://gyxx.hnqczy.com/m/moa/login" class="card">
+                <div class="card-icon"><i class="fas fa-globe"></i></div>
+                <div class="card-text">
+                    <div class="card-title">工校智慧校园（外网）</div>
+                    <div class="card-desc">外网登陆</div>
+                </div>
+            </a>
+            <a href="http://10.10.7.9/m/moa/login" target="_blank" class="card">
+                <div class="card-icon"><i class="fas fa-globe"></i></div>
+                <div class="card-text">
+                    <div class="card-title">工校智慧校园（内网） <i class="fas fa-external-link-alt external-link"></i></div>
+                    <div class="card-desc">内网登陆</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- 第三类：校园安防监控 -->
+        <h2 class="category-title">校园安防监控</h2>
+        <div class="grid">
+            <a href="anfang.html" class="card">
+                <div class="card-icon"><i class="fas fa-video"></i></div>
+                <div class="card-text">
+                    <div class="card-title">校园安防监控</div>
+                    <div class="card-desc">AI巡更/天翼监控联动</div>
+                </div>
+            </a>
+            <a href="daba.html" class="card">
+                <div class="card-icon"><i class="fas fa-volume-up"></i></div>
+                <div class="card-text">
+                    <div class="card-title">天翼大喇叭</div>
+                    <div class="card-desc">应急广播/分区播报</div>
+                </div>
+            </a>
+            <a href="baoxiu.html" class="card">
+                <div class="card-icon"><i class="fas fa-wrench"></i></div>
+                <div class="card-text">
+                    <div class="card-title">设备报修</div>
+                    <div class="card-desc">一键报修/资产巡检</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- 第四类：校园智慧宿舍 -->
+        <h2 class="category-title">智慧宿舍绩效</h2>
+        <div class="grid">
+            <a href="anfang.html" class="card">
+                <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="card-text">
+                    <div class="card-title">宿舍考勤考核</div>
+                    <div class="card-desc">夜间请假/班主任考核</div>
+                </div>
+            </a>
+            <a href="https://ddmxpsxv4b.coze.site/" class="card">
+                <div class="card-icon"><i class="fas fa-clipboard-check"></i></div>
+                <div class="card-text">
+                    <div class="card-title">宿舍常规考核</div>
+                    <div class="card-desc">日常管理/班主任考核</div>
+                </div>
+            </a>
+            <a href="https://vfqzxfqmsh.coze.site/" class="card">
+                <div class="card-icon"><i class="fas fa-file-signature"></i></div>
+                <div class="card-text">
+                    <div class="card-title">宿舍周报汇总</div>
+                    <div class="card-desc">周报分析/班主任考核</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- 第五类：智慧后勤与数据 -->
+        <h2 class="category-title">智慧后勤与数据</h2>
+        <div class="grid">
+            <a href="houqin.html" class="card">
+                <div class="card-icon"><i class="fas fa-utensils"></i></div>
+                <div class="card-text">
+                    <div class="card-title">智慧后勤</div>
+                    <div class="card-desc">食堂膳食/能源监测</div>
+                </div>
+            </a>
+            <a href="datascreen.html" class="card">
+                <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="card-text">
+                    <div class="card-title">数据展示大屏</div>
+                    <div class="card-desc">校园实时数据/预警报表</div>
+                </div>
+            </a>
+            <a href="config.html" class="card">
+                <div class="card-icon"><i class="fas fa-cog"></i></div>
+                <div class="card-text">
+                    <div class="card-title">平台配置中心</div>
+                    <div class="card-desc">权限管理/系统参数</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- 页脚（学校官方） -->
+    <div class="footer">
+        © 2025 株洲市工业中等专业学校（SCMP） 版权所有 | 智慧校园建设与运维
     </div>
 </body>
 </html>
