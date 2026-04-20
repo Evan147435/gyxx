@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>友情链接 · 更多推荐</title>
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts 提升字体质感 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 整体容器 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* 回到首页按钮 - 固定在左上角 */
+        .back-home {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 100;
+            background: white;
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #e2e8f0;
+            border-radius: 60px;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1e293b;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            font-family: inherit;
+        }
+        .back-home i {
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+        .back-home:hover {
+            background: #1e293b;
+            border-color: #1e293b;
+            color: white;
+            transform: translateX(-3px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+        }
+        .back-home:hover i {
+            transform: translateX(-3px);
+        }
+
+        /* 头部区域 */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            margin-top: 0.5rem;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e293b, #2d3a4f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .header h1 i {
+            background: none;
+            color: #3b82f6;
+            margin-right: 10px;
+        }
+        .sub {
+            color: #475569;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: inline-block;
+            padding-bottom: 6px;
+        }
+
+        /* 搜索框 */
+        .search-bar {
+            max-width: 500px;
+            margin: 1.8rem auto 2rem auto;
+            position: relative;
+        }
+        .search-bar i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 3rem;
+            font-size: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 60px;
+            background: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .search-bar input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.15);
+        }
+
+        /* 分类标签 (filter chips) */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-bottom: 2.8rem;
+        }
+        .cat-chip {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #334155;
+            backdrop-filter: blur(2px);
+        }
+        .cat-chip i {
+            margin-right: 6px;
+            font-size: 0.8rem;
+        }
+        .cat-chip.active {
+            background: #1e293b;
+            border-color: #1e293b;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .cat-chip:hover:not(.active) {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        /* 卡片网格 */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1.6rem;
+        }
+
+        /* 单个卡片 */
+        .link-card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.4rem 1.2rem;
+            transition: all 0.25s ease;
+            border: 1px solid #eef2ff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: inherit;
+        }
+        .link-card:hover {
+            transform: translateY(-4px);
+            border-color: #cbdffc;
+            box-shadow: 0 20px 25px -12px rgba(0,0,0,0.08);
+            background: #ffffff;
+        }
+        /* 图标区域 */
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            background: #eff6ff;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #2563eb;
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        .link-card:hover .card-icon {
+            background: #dbeafe;
+            transform: scale(0.98);
+        }
+        .card-info {
+            flex: 1;
+            overflow: hidden;
+        }
+        .card-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-info p {
+            font-size: 0.78rem;
+            color: #5b6e8c;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .badge-cat {
+            background: #f1f5f9;
+            padding: 0.2rem 0.5rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #334155;
+        }
+        .frequency {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #fef9e3;
+            color: #b45309;
+            padding: 0.2rem 0.5rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+        }
+        .fa-chevron-right {
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            transition: 0.2s;
+        }
+        .link-card:hover .fa-chevron-right {
+            transform: translateX(4px);
+            color: #3b82f6;
+        }
+
+        /* 无结果提示 */
+        .no-result {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 3rem;
+            background: #f1f5f9;
+            border-radius: 2rem;
+            color: #475569;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            margin-top: 3.5rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+            color: #62748c;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1.2rem;
+            }
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.4rem;
+            }
+            .back-home {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.45rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 回到首页按钮 - 链接到网站根目录或指定首页地址 -->
+    <a href="/" class="back-home" title="回到首页">
+        <i class="fas fa-arrow-left"></i> 回到首页
+    </a>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-link"></i> 友情链接 · 更多推荐</h1>
+        <div class="sub">合作伙伴 · 实用工具 · 灵感源泉</div>
+    </div>
+
+    <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="搜索链接名称、描述或分类..." autocomplete="off">
+    </div>
+
+    <div class="categories" id="categoryFilter">
+        <!-- 动态js生成分类按钮, 保留全部 -->
+    </div>
+
+    <div class="links-grid" id="linksContainer">
+        <!-- 卡片会由js渲染 -->
+    </div>
+
+    <div class="footer">
+        <i class="far fa-compass"></i> 持续收录优质站点 · 如有推荐请联系
+    </div>
+</div>
+
+<script>
+    // ----- 原始数据 (整合了你的友情链接，修正id重复，补充几个常用站点) -----
+    const rawLinks = [
+        { id: 21, name: "微信文件传输助手", url: "https://szfilehelper.weixin.qq.com/", category: "友情链接", description: "微信文件传输助手网页版", icon: "fas fa-handshake", frequency: 2 },
+        { id: 22, name: "行业资讯", url: "https://news.example.com", category: "友情链接", description: "行业新闻与资讯平台", icon: "fas fa-newspaper", frequency: 3 },
+        { id: 23, name: "字体图标中文Icon", url: "https://fontawesome.com/", category: "友情链接", description: "Font Awesome 图标库", icon: "fa-solid fa-earth-americas", frequency: 5 },
+        { id: 24, name: "DeepSeek", url: "https://www.deepseek.com/", category: "友情链接", description: "DeepSeek - 探索未至之境", icon: "fa-solid fa-globe-pointer", frequency: 4 },
+        { id: 25, name: "班主任考勤", url: "https://cli.im/", category: "智慧办公", description: "草料二维码 · 快捷生成", icon: "fa-solid fa-calendar-days", frequency: 4 },
+        { id: 26, name: "百度搜索", url: "https://www.baidu.com/", category: "友情链接", description: "百度一下，你就知道", icon: "fa-solid fa-magnifying-glass", frequency: 4 },
+        { id: 27, name: "客户服务", url: "https://service.example.com", category: "友情链接", description: "客户服务与支持中心", icon: "fas fa-headset", frequency: 3 },
+        // 扩充更多分类，让布局更饱满 (可自行修改)
+        { id: 28, name: "GitHub 开源社区", url: "https://github.com", category: "开发者工具", description: "全球开发者协作平台", icon: "fab fa-github", frequency: 5 },
+        { id: 29, name: "Canva 可画", url: "https://www.canva.com", category: "创意设计", description: "在线设计，海量模板", icon: "fas fa-palette", frequency: 4 },
+        { id: 30, name: "ProcessOn", url: "https://www.processon.com", category: "智慧办公", description: "在线思维导图 & 流程图", icon: "fas fa-brain", frequency: 3 },
+        { id: 31, name: "阿里云盘", url: "https://www.aliyundrive.com", category: "云存储", description: "不限速个人云盘", icon: "fas fa-cloud-arrow-up", frequency: 4 },
+        { id: 32, name: "Trello", url: "https://trello.com", category: "智慧办公", description: "团队协作看板工具", icon: "fab fa-trello", frequency: 3 },
+        { id: 33, name: "V2EX", url: "https://www.v2ex.com", category: "开发者社区", description: "创意工作者们的社区", icon: "fas fa-comments", frequency: 4 },
+        { id: 34, name: "知乎", url: "https://www.zhihu.com", category: "知识社区", description: "有问题，就会有答案", icon: "fab fa-zhihu", frequency: 5 },
+        { id: 35, name: "MDN Web Docs", url: "https://developer.mozilla.org/zh-CN/", category: "开发者工具", description: "权威Web技术文档", icon: "fab fa-firefox", frequency: 4 }
+    ];
+
+    // 获取所有唯一分类，用于筛选按钮
+    const allCategories = [...new Set(rawLinks.map(link => link.category))].sort((a,b) => a.localeCompare(b));
+
+    // DOM 元素
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilterDiv = document.getElementById('categoryFilter');
+    const linksContainer = document.getElementById('linksContainer');
+
+    let currentCategory = '全部';      // 当前选中的分类
+    let currentKeyword = '';           // 当前搜索关键词
+
+    // 辅助函数: 根据分类 + 关键词过滤
+    function filterLinks() {
+        return rawLinks.filter(link => {
+            // 分类匹配 (全部 或 精确匹配)
+            const matchCategory = currentCategory === '全部' || link.category === currentCategory;
+            // 关键词匹配 (名称、描述、分类)
+            const keyword = currentKeyword.trim().toLowerCase();
+            let matchKeyword = true;
+            if (keyword !== '') {
+                matchKeyword = link.name.toLowerCase().includes(keyword) ||
+                               link.description.toLowerCase().includes(keyword) ||
+                               link.category.toLowerCase().includes(keyword);
+            }
+            return matchCategory && matchKeyword;
+        });
+    }
+
+    // 渲染卡片
+    function renderLinks() {
+        const filtered = filterLinks();
+        if (filtered.length === 0) {
+            linksContainer.innerHTML = `<div class="no-result"><i class="fas fa-ban"></i> 没有找到相关链接，试试其他关键词吧~</div>`;
+            return;
+        }
+
+        const cardsHtml = filtered.map(link => {
+            // 处理图标类 (有些可能带fa-前缀不规范，但基本通用)
+            let iconClass = link.icon;
+            if (!iconClass.startsWith('fa')) iconClass = 'fas fa-link';
+            // 显示频率星/热度简标
+            const freqStar = '⭐'.repeat(Math.min(link.frequency || 2, 5));
+            return `
+                <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="link-card">
+                    <div class="card-icon">
+                        <i class="${iconClass}"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>${escapeHtml(link.name)}</h3>
+                        <p>
+                            <span class="badge-cat"><i class="fas fa-tag"></i> ${escapeHtml(link.category)}</span>
+                            <span class="frequency"><i class="fas fa-fire"></i> ${freqStar} ${link.frequency}</span>
+                            <span style="font-size:0.7rem; color:#6c86a3;">${escapeHtml(link.description.substring(0, 32))}</span>
+                        </p>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            `;
+        }).join('');
+        linksContainer.innerHTML = cardsHtml;
+    }
+
+    // 简单防XSS
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // 渲染分类按钮
+    function renderCategories() {
+        let btnsHtml = `<button class="cat-chip active" data-cat="全部"><i class="fas fa-layer-group"></i> 全部</button>`;
+        allCategories.forEach(cat => {
+            btnsHtml += `<button class="cat-chip" data-cat="${escapeHtml(cat)}"><i class="fas fa-folder-open"></i> ${escapeHtml(cat)}</button>`;
+        });
+        categoryFilterDiv.innerHTML = btnsHtml;
+
+        // 绑定点击事件
+        document.querySelectorAll('.cat-chip').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const catValue = this.getAttribute('data-cat');
+                // 更新active样式
+                document.querySelectorAll('.cat-chip').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = catValue;
+                renderLinks();
+            });
+        });
+    }
+
+    // 监听搜索输入
+    function bindSearchEvent() {
+        searchInput.addEventListener('input', function(e) {
+            currentKeyword = e.target.value;
+            renderLinks();
+        });
+    }
+
+    // 初始化页面
+    function init() {
+        renderCategories();
+        bindSearchEvent();
+        renderLinks();
+    }
+
+    init();
+</script>
+</body>
+</html>
